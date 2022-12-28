@@ -1,15 +1,16 @@
 import torch
 import sys
 import nite.serialization
+import nite.optims
 
 class Net(torch.nn.Module):
     def __new__(cls, *args, **kwargs):
         obj = super().__new__(cls)
         super(cls, obj).__init__()
+        obj.loss = None
+        obj.optim = nite.optims.Adam()
+        obj.metrics = []
         return obj
-        self.loss = None
-        self.optim = None
-        self.metrics = []
 
     def fit(self, train_dataloader, epochs=1, val_dataloader=None):
         self.optim.setup(self.parameters())
