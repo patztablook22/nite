@@ -1,4 +1,7 @@
-# Nite
+![Nite](media/img/banner.jpg)
+
+# About
+
 Nite is a Python neural networks framework built on top of Torch. It focuses on reducing boilerplate.
 For example, having to write a training loop is something we unfortunately have to do with vanilla Torch.
 This is both boring and prone to bugs. Nite wraps commonly used Torch components in a way convenient to work with.
