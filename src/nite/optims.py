@@ -4,7 +4,7 @@ class Optim:
     def setup(self, params):
         pass
 
-    def step(self):
+    def apply(self):
         raise NotImplementedError
 
 class Sgd(Optim):
@@ -16,7 +16,7 @@ class Sgd(Optim):
         self._internal = torch.nn.SGD(params=params,
                                       lr=self._lr)
 
-    def step(self):
+    def apply(self):
         self._internal.step()
 
 class Adam(Optim):
@@ -28,5 +28,17 @@ class Adam(Optim):
         self._internal = torch.optim.Adam(params=params,
                                        lr=self._lr)
 
-    def step(self):
+    def apply(self):
         self._internal.step()
+
+class Clip(Optim):
+    def __init__(self, value):
+        self._value = value
+        self._params = None
+
+    def setup(self, params):
+        self._params = list(params)
+
+    def apply(self):
+        for param in self._params:
+            param.grad = torch.clip(param.grad, -self._value, +self._value)
