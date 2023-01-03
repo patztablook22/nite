@@ -1,12 +1,19 @@
 ![Nite](media/img/banner.jpg)
 
+[this whole thing is work in progress]
 ## About
 
-Nite is a Python neural networks framework built on top of [Torch](https://pytorch.org/). It focuses on reducing boilerplate.
-For example, having to write a 
-[training loop](https://pytorch.org/tutorials/beginner/basics/optimization_tutorial.html#optimization-loop) 
-is something we unfortunately have to do with vanilla Torch.
-This is both boring and prone to bugs. Nite wraps commonly used Torch components in a way convenient to work with.
+Nite is a Python neural networks framework built on top of [Torch](https://pytorch.org/) with the following goals:
+
+1. No extra dependencies. \
+   Nite is as lightweight as possible.
+   
+2. No runtime overhead. \
+   Nite makes code cleaner, not slower.
+   
+3. Flexibility matters. \
+   Nite shines in a plenty of scenarios.
+   
 
 ## Example
 
@@ -15,25 +22,20 @@ import torch
 import nite
 
 
-dataset = ...
+data_train, data_test = ...
 
-class Net(nite.Net):
-  def __init__(self):
-    self._convs = nite.Sequential(
-      nite.Conv2d(1, 2, 'relu,batchnorm', 2, 'same'),
-      nite.Conv2d(2, 3, 'relu,batchnorm', 2, 'same'),
-    )
-    self._head = nite.Sequential(
-      nite.Flatten(),
-      nite.Dense(7*7, 30, 'relu'),
-      nite.Dense(30, 10)
-    )
+net = nite.Sequential(
+    nite.Conv2d(1, 2, 'relu,batchnorm', 2, 'same'),
+    nite.Conv2d(2, 3, 'relu,batchnorm', 2, 'same'),
+    nite.flatten,
+    nite.Dense(7*7, 30, 'relu'),
+    nite.Dense(30, 10)
+)
     
-  def forward(self, feed):
-    return self._head(self._convs(feed))
+net.loss = nite.losses.CrossEntropy()
+net.metrics = nite.metrics.CategoricalAccuracy()
     
-net = Net()
-net.fit(dataset)
+net.fit(data_train, data_test, epochs=10)
 ```
 
 ## Installation
